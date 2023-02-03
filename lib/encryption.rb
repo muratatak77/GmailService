@@ -3,13 +3,12 @@ module Encryption
   INITIALIZATION_VECTOR_LENGTH = 8
 
   def get_cipher
-    OpenSSL::Cipher.new("bf-cbc")
+    OpenSSL::Cipher.new('bf-cbc')
   end
-    
+
   def encrypt(plaintext, passphrase)
-    if plaintext.nil?
-      return nil
-    end
+    return nil if plaintext.nil?
+
     crypt = get_cipher
     crypt.encrypt
     crypt.key = Digest::SHA1.digest(passphrase)
@@ -21,17 +20,15 @@ module Encryption
   end
 
   def decrypt(ciphertext, passphrase)
-    if ciphertext.nil?
-      return nil
-    end
+    return nil if ciphertext.nil?
+
     crypt = get_cipher
     crypt.decrypt
     crypt.key = Digest::SHA1.digest(passphrase)
     binary_text = Base64.decode64(ciphertext)
-    if binary_text.length < INITIALIZATION_VECTOR_LENGTH
-      raise "ciphertext too short to include initialization vector"
-    end
-    crypt.iv = binary_text.slice!(0..INITIALIZATION_VECTOR_LENGTH-1)
+    raise 'ciphertext too short to include initialization vector' if binary_text.length < INITIALIZATION_VECTOR_LENGTH
+
+    crypt.iv = binary_text.slice!(0..INITIALIZATION_VECTOR_LENGTH - 1)
     crypt.update(binary_text) << crypt.final
   end
 

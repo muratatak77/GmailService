@@ -5,13 +5,11 @@ class DeflateSocket
     @inflater << current_buffer if current_buffer.present?
 
     @deflater = Zlib::Deflate.new(nil, -Zlib::MAX_WBITS)
-    @read_buffer = ""
+    @read_buffer = ''
     finalizer_proc = proc do
-      begin
-        @inflater.end
-        @deflater.close
-      rescue
-      end
+      @inflater.end
+      @deflater.close
+    rescue StandardError
     end
     ObjectSpace.define_finalizer(self, finalizer_proc)
   end
@@ -23,7 +21,7 @@ class DeflateSocket
 
   def read(count)
     check_eof
-    while !@inflater.finished? && @read_buffer.size < count do
+    while !@inflater.finished? && @read_buffer.size < count
       read_from_socket
       break if @socket_end_of_file
     end
@@ -32,9 +30,7 @@ class DeflateSocket
 
   def readpartial(count)
     check_eof
-    while !@inflater.finished? && @read_buffer.size == 0
-      read_from_socket
-    end
+    read_from_socket while !@inflater.finished? && @read_buffer.size == 0
     @read_buffer.slice!(0, count)
   end
 
@@ -62,32 +58,32 @@ class DeflateSocket
   end
 
   private
+
   def close_streams
     @inflater.reset
     @deflater.reset
   end
 
   def read_from_socket
-    unless @socket_end_of_file
+    return if @socket_end_of_file
+
+    begin
+      raw_read = @socket.readpartial(1000)
+      @inflater << raw_read
+      @read_buffer << @inflater.flush_next_out
+    rescue EOFError => e
+      @socket_end_of_file = true
       begin
-        raw_read = @socket.readpartial(1000)
-        @inflater << raw_read 
-        @read_buffer << @inflater.flush_next_out
-      rescue EOFError => eof
-        @socket_end_of_file = true
-        begin
-          @read_buffer << @inflater.finish
-        rescue Zlib::BufError
-          raise eof
-        end
+        @read_buffer << @inflater.finish
+      rescue Zlib::BufError
+        raise e
       end
     end
   end
 
   def check_eof
-    if @inflater.finished? && @read_buffer.size == 0
-      raise EOFError
-    end
-  end
+    return unless @inflater.finished? && @read_buffer.size == 0
 
+    raise EOFError
+  end
 end

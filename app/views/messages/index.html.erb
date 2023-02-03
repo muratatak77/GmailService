@@ -1,0 +1,54 @@
+
+
+<div class="container">
+ <div class="row">
+    <div class="col-sm">
+      <table class="table table-sm ">
+        <% @messages.each do |key,val| %>
+          <tr>
+            <td class="table-primary"><h6><%= key %></h6></td>
+          </tr>
+          <tr>
+            <td>
+              <ul class="list-group">
+                <% val.each do |item| %>
+                  <li class="list-group-item">
+                    <b>To</b> : <%= item[:to] %></br>
+                    <% if item[:cc].present? %>                     
+                      <b>Cc</b> : <%= item[:cc] %></br>
+                    <% end %>
+                    <b>Subject</b> : <%= item[:subject] %>
+                  </li>
+                <% end %>
+              </ul>
+            </td>
+          </tr>
+        <% end %>
+      </table>
+    </div>
+  </div>
+
+ <div class="row">
+    <div class="col-sm">
+      <nav aria-label="Page navigation example">
+        <ul class="pagination">
+          <% @page_tokens.each_with_index do |token, idx| %>
+            
+            <li class="page-item ">
+
+            <% if @page.to_i == idx + 1 %>
+              <li class="page-item active">
+            <% end %>
+
+            <a class="page-link" href="?page_token=<%= token %>&page=<%= idx + 1 %>"><%= idx + 1 %></a>
+            </li>
+          <% end %>
+        </ul>
+      </nav>
+    </div>
+  </div>
+
+</div>
+
+
+

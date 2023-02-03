@@ -1,0 +1,17 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  name: MyString
+  email: MyString
+  access_token: MyString
+  scope: MyString
+  refresh_token: MyString
+  expires_at: 2023-02-01 12:02:17
+
+two:
+  name: MyString
+  email: MyString
+  access_token: MyString
+  scope: MyString
+  refresh_token: MyString
+  expires_at: 2023-02-01 12:02:17

@@ -5,16 +5,17 @@ module DateTimeRanges
   end
 
   def last_7_days
-    self.beginning_of_day - 1.week .. self.end_of_day
+    beginning_of_day - 1.week..end_of_day
   end
 
   def days_ago(day)
-    day = self.beginning_of_day - day.days
+    day = beginning_of_day - day.days
     day..day.end_of_day
   end
 
   def last_weekday(wday)
     raise "invalid weekday:#{wday}" unless (0..6).include?(wday)
+
     last_week = self - 1.week
     day = last_week.beginning_of_week + wday.days
     day.beginning_of_day..day.end_of_day
@@ -22,7 +23,7 @@ module DateTimeRanges
 
   def last_15_minutes
     now = self
-    (now-15.minutes)..now
+    (now - 15.minutes)..now
   end
 
   def today
@@ -35,13 +36,13 @@ class Object
   include DateTimeRanges
 
   def to_imap_date
-    Date.parse(to_s).strftime("%d-%b-%Y")
+    Date.parse(to_s).strftime('%d-%b-%Y')
   end
 
   def to_imap_internal_date
-    str = to_s.split(" ")
+    str = to_s.split(' ')
     str.delete_at(0)
-    ([to_s.to_imap_date] + str).join(" ")
+    ([to_s.to_imap_date] + str).join(' ')
   end
 
   # convert date/time to same wall time, but in different timezone

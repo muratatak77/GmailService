@@ -1,7 +1,6 @@
 class Module
-
   def constant_values
-    constants.map {|c| const_get(c)}
+    constants.map { |c| const_get(c) }
   end
 
   # This method was deprecated in Rails 5.0.x and was removed in Rails 5.1.  We have
@@ -33,7 +32,8 @@ class Module
   def alias_method_chain(target, feature)
     # Strip out punctuation on predicates, bang or writer methods since
     # e.g. target?_without_feature is not a valid method name.
-    aliased_target, punctuation = target.to_s.sub(/([?!=])$/, ''), $1
+    aliased_target = target.to_s.sub(/([?!=])$/, '')
+    punctuation = ::Regexp.last_match(1)
     yield(aliased_target, punctuation) if block_given?
 
     with_method = "#{aliased_target}_with_#{feature}#{punctuation}"
@@ -42,12 +42,11 @@ class Module
     alias_method without_method, target
     alias_method target, with_method
 
-    case
-    when public_method_defined?(without_method)
+    if public_method_defined?(without_method)
       public target
-    when protected_method_defined?(without_method)
+    elsif protected_method_defined?(without_method)
       protected target
-    when private_method_defined?(without_method)
+    elsif private_method_defined?(without_method)
       private target
     end
   end
