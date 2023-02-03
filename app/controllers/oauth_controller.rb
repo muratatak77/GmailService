@@ -16,6 +16,6 @@ class OauthController < ApplicationController
   private
 
   def client
-    @client ||= GoogleAuth2.new.client
+    @client ||= GoogleOauth2.new.client
   end
 end
