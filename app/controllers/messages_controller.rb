@@ -13,9 +13,9 @@ class MessagesController < ApplicationController
     gmail = authenticated_client(account)
     using_page_token = params[:page_token]
     result = if using_page_token
-               gmail.list_user_messages('me', max_results: PER_PAGINATE, page_token: using_page_token)
+               gmail.list_user_messages('me', max_results: PER_PAGINATE, label_ids: 'INBOX', page_token: using_page_token)
              else
-               gmail.list_user_messages('me', max_results: PER_PAGINATE)
+               gmail.list_user_messages('me', max_results: PER_PAGINATE, label_ids: 'INBOX')
              end
     load_message_detail(result)
   rescue StandardError
@@ -23,7 +23,7 @@ class MessagesController < ApplicationController
   end
 
   private
-
+ 
   def load_message_detail(result)
     message_details = []
     result.messages.each do |item|
