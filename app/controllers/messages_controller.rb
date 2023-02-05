@@ -41,7 +41,7 @@ class MessagesController < ApplicationController
 
   # Getting just page tokens till MAX_MESSAGE_SIZE : 100, and just 1 fetch will be enough
   def load_page_tokens
-    Rails.cache.fetch("page_tokens_cache_by_#{account.id}", expires_in: 1.hour) do
+    Rails.cache.fetch("page_tokens_cache_by_#{account.id}_#{account.updated_at}", expires_in: 1.hour) do
       load_all_page_tokens_by_account(account)
     end
   end
