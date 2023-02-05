@@ -1,20 +1,3 @@
-# Welcome
-
-You should receive a request to share a repository on GitHub. The repository contains the code for your programming test. You will need to have a development environment in which you can install Rails to work on the test.
-
-* Please find a time where can spend at least an hour working on the test.
-* You should **not** spend more than 30 minutes setting up the environment to work on the test, contact us if you are having an issue.
-* You are not necessarily expected to finish the test in the alloted time, but try to get as far as possible
-
-Once you accept the share request, set up your computer to access GitHub.
-
-After you checkout the repository:
-
-    git clone ssh://github.com/sanebox/interview-%{email_url}.git
-
-The repository you cloned contains the set up for your programming test.
-
-This repository is set up to use Bundler. You may add any 3rd party gems that you find to be useful.
 
 Using the [Gmail REST API][1], and the [Ruby Google API client][2], construct a web service that will list the contents of the users **INBOX**.
 
@@ -37,8 +20,7 @@ The messages should be neatly displayed and grouped by **From** address.  Use yo
       To: <another@address.com>
       Subject: Subject 4
 
-When you're done, just push your code to the repository using your typical git
-commands and drop me a note!
+
 
 Some things to consider:
 
@@ -49,7 +31,6 @@ Some things to consider:
 
 There is already a Project setup in the Google Developer Console for this task.
 The registered callback URI is http://localhost:3000/google/oauth2/callback.
-If, for some reason, you need a different URI please let me know.
 
 You may initialize a new *unauthenticated* client using the following code:
 
