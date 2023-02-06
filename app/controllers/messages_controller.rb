@@ -18,8 +18,6 @@ class MessagesController < ApplicationController
                gmail.list_user_messages('me', max_results: PER_PAGINATE, label_ids: 'INBOX')
              end
     load_message_detail(result)
-  rescue StandardError
-    redirect_to controller: :oauth, action: :index
   end
 
   private

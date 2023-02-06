@@ -3,7 +3,7 @@ class ApplicationController < ActionController::Base
   rescue_from Exception, with: :error_occurred
 
   def error_occurred(exception)
-    if (exception.to_s.include? 'Authorization') || (exception.to_s.include? 'invalid_grant')
+    if (exception.to_s.include? 'Authorization'.downcase ) || (exception.to_s.include? 'invalid_grant')
       redirect_to controller: :oauth, action: :index
     else
       puts "GETTING ANOTHER ERROR : #{exception.message}"
